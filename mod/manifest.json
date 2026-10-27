@@ -1,0 +1,51 @@
+{
+  "id": "neo.file-dungeon",
+  "name": "ファイル・ダンジョン",
+  "version": "0.3.0",
+  "apiVersion": 1,
+  "entry": "index.js",
+  "uses": ["entries", "size", "modified", "thumbnails", "fileInfo", "recent"],
+  "location": "folder",
+  "description": "フォルダをダンジョンにして遊ぶアクションゲーム。討伐対象は長く使われていないファイルだけ（最近使ったものは画面に出ません）。倒した分は「回収待ち」にたまり、ごみ箱へ送る前に、本体の確認をまとめて1回通します。通信（任意）：Claude API・DiceBear・Open-Meteo。送るのはファイル名・拡張子・サイズ・未使用の期間だけで、ファイルの中身は読みません",
+  "network": [
+    "https://api.anthropic.com",
+    "https://api.dicebear.com",
+    "https://api.open-meteo.com"
+  ],
+  "settings": [
+    { "key": "staleDays", "label": "討伐対象にする未使用の日数", "type": "number", "default": 730, "min": 30, "max": 3650, "step": 30 },
+    { "key": "useAccessTime", "label": "アクセス日時も見る（新しい方を採用）", "type": "boolean", "default": true },
+    { "key": "maxMonsters", "label": "モンスターの最大数", "type": "number", "default": 60, "min": 10, "max": 200, "step": 10 },
+    { "key": "counter", "label": "モンスターが反撃する", "type": "boolean", "default": true },
+    { "key": "sound", "label": "効果音を鳴らす", "type": "boolean", "default": true },
+    { "key": "thumbs", "label": "サムネイルを顔に使う（アクセス日時が更新される）", "type": "boolean", "default": false },
+    { "key": "showHidden", "label": "隠しファイルも出す", "type": "boolean", "default": false },
+    { "key": "llm", "label": "AIでセリフと日誌を作る（ファイル名を Anthropic に送ります）", "type": "boolean", "default": true },
+    { "key": "model", "label": "AIのモデル", "type": "choice", "default": "claude-haiku-5-5",
+      "options": [
+        { "value": "claude-haiku-5-5", "label": "Haiku 5.5（速い・安い）" },
+        { "value": "claude-sonnet-5-5", "label": "Sonnet 5.5（文章が上手）" }
+      ] },
+    { "key": "apiKey", "label": "Anthropic の API キー", "type": "secret",
+      "send": { "origin": "https://api.anthropic.com", "header": "x-api-key" } },
+    { "key": "avatars", "label": "モンスターの見た目（DiceBear）", "type": "choice", "default": "pixel-art",
+      "options": [
+        { "value": "off", "label": "使わない（絵文字だけ）" },
+        { "value": "pixel-art", "label": "ドット絵" },
+        { "value": "bottts-neutral", "label": "ロボット" },
+        { "value": "fun-emoji", "label": "顔文字" },
+        { "value": "thumbs", "label": "サムズ" }
+      ] },
+    { "key": "weather", "label": "現実の天気を反映する（Open-Meteo）", "type": "boolean", "default": true },
+    { "key": "city", "label": "天気の場所", "type": "choice", "default": "35.68,139.76",
+      "options": [
+        { "value": "43.06,141.35", "label": "札幌" },
+        { "value": "38.27,140.87", "label": "仙台" },
+        { "value": "35.68,139.76", "label": "東京" },
+        { "value": "35.18,136.91", "label": "名古屋" },
+        { "value": "34.69,135.50", "label": "大阪" },
+        { "value": "33.59,130.40", "label": "福岡" },
+        { "value": "26.21,127.68", "label": "那覇" }
+      ] }
+  ]
+}
